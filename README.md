@@ -1,15 +1,7 @@
 Math 50 Fall 2017, Homework \#6
 ================
 
-In collaboration with (no copying of code!): Sam, Itzel, Summer
-
-**NOTE: For your homework download and use the template**
-(<https://math.dartmouth.edu/~m50f17/HW6.Rmd>)
-
-**Read the green comments in the rmd file to see where your answers
-should go.**
-
-#### Lets first look at the scatter plot for the windmill data, and visually check the straight line fit.
+Lets first look at the scatter plot for the windmill data, and visually check the straight line fit.
 
 ``` r
 windmill <- read.table("https://math.dartmouth.edu/~m50f17/windmill.csv", header=T)
@@ -20,13 +12,12 @@ abline(fit$coefficients, col="red")
 
 ![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
-#### The summary statistics are below, *R*<sup>2</sup> is about 0.87. The residual plot below suggests that the relation might be non-linear. When you look at the above scatter diagram one might think the straight line model seems OK, however the residual plot below amplifies the nonlinearity. Why? Can we also see this by carefully looking at the scatter plot above?
+The summary statistics are below, *R*<sup>2</sup> is about 0.87. The residual plot below suggests that the relation might be non-linear. When you look at the above scatter diagram one might think the straight line model seems OK, however the residual plot below amplifies the nonlinearity. Why? Can we also see this by carefully looking at the scatter plot above?
 
 ``` r
 summary(fit)
 ```
 
-    ## 
     ## Call:
     ## lm(formula = DC ~ velocity, data = windmill)
     ## 
@@ -52,14 +43,13 @@ abline(c(0,0), col="red")
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
-#### Also note that it looks like that there is a potential outlier and however this might change when we fix the model. It seems consistent with the rest (visually). Start with fitting a quadratic model.
+Also note that it looks like that there is a potential outlier and however this might change when we fix the model. It seems consistent with the rest (visually). Start with fitting a quadratic model.
 
 ``` r
 fit2 <- lm(DC~poly(velocity, degree = 2), data = windmill)
 summary(fit2)
 ```
 
-    ## 
     ## Call:
     ## lm(formula = DC ~ poly(velocity, degree = 2), data = windmill)
     ## 
@@ -87,9 +77,7 @@ lines(sort(windmill$velocity), fitted(fit2)[order(windmill$velocity)], col='red'
 
 ![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
-#### This seems to fix the curved nature of the data, however the application domain suggests to use a model of the form 
-$$ y = \\beta\_0 + \\beta\_1 \\frac{1}{x} + \\varepsilon $$
- Note that there doesn’t seem a potential outlier in the new model.
+This seems to fix the curved nature of the data, however the application domain suggests to use a model of the form *y = β<sub>0</sub>+β<sub>1</sub>(1/x)+ε*. Note that there doesn’t seem a potential outlier in the new model.
 
 ``` r
 velRep = 1/windmill$velocity
@@ -106,7 +94,6 @@ abline(fit3$coefficients, col="red")
 summary(fit3)
 ```
 
-    ## 
     ## Call:
     ## lm(formula = DC ~ velRep)
     ## 
@@ -137,8 +124,8 @@ abline(c(0,0), col="red")
 -   Recall the phytoplankton population data is given at :
 -   <https://math.dartmouth.edu/~m50f17/phytoplankton.csv>
 -   where headers are
-    -   pop : population of phytoplankton (*y*)
-    -   subs2 : concentration of substance-2 (*x*)
+    -   `pop` : population of phytoplankton (*y*)
+    -   `subs2` : concentration of substance-2 (*x*)
 
 ### Part (a)
 
@@ -163,7 +150,6 @@ abline(fit$coefficients,col="red")
 summary(fit)
 ```
 
-    ## 
     ## Call:
     ## lm(formula = pop ~ subs2, data = data)
     ## 
@@ -204,22 +190,11 @@ SS_t = sum((pop - mean(pop))^2)
 MS_res_a = SS_res_a/(n - (k+1))
 ```
 
-The straight line model does not seem adequate because of the nonlinear
-trend in the scatter plot data. The summary statistics reveal
-*R*<sup>2</sup> and adjusted *R*<sup>2</sup> to be 0.291 and 0.286
-respectively, and MSres was calculated to be 405.5107192. These low
-*R*<sup>2</sup> values suggest the linear model is not a great fit for
-the phytoplankton data, while the large MSres value (compared to the
-MSres found in part (c)) indicates excessively high variance due to the
-model. The residuals plot shows an evident structure and the normal
-probability plot shows the residuals don’t follow the line, suggesting
-the need for other regressors and a violation of the normality
-assumption.
+The straight line model does not seem adequate because of the nonlinear trend in the scatter plot data. The summary statistics reveal *R*<sup>2</sup> and adjusted *R*<sup>2</sup> to be 0.291 and 0.286 respectively, and MSres was calculated to be 405.5107192. These low *R*<sup>2</sup> values suggest the linear model is not a great fit for the phytoplankton data, while the large *MS*<sub>res</sub> value (compared to the *MS*<sub>res</sub> found in part (c)) indicates excessively high variance due to the model. The residuals plot shows an evident structure and the normal probability plot shows the residuals don’t follow the line, suggesting the need for other regressors and a violation of the normality assumption.
 
 ### Part (b)
 
--   Do you suggest to use Box-Cox method? If not explain, if so apply
-    the method and demonstrate the improvement.
+-   Do you suggest to use Box-Cox method? If not explain, if so apply the method and demonstrate the improvement.
 
 ``` r
 subs2Test = subs2
@@ -236,7 +211,6 @@ fit2 = lm(new_pop ~ subs2, data = data)
 summary(fit2)
 ```
 
-    ## 
     ## Call:
     ## lm(formula = new_pop ~ subs2, data = data)
     ## 
@@ -271,27 +245,13 @@ abline(c(0,0), col="red")
 
 ![](README_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
 
-Because in part (a) the normal probability and residuals plots show that
-the normality assumption and constant variance condition are not met, we
-should try the Box-Cox method. Box-Cox method yields a transformation
-with lambda: 2. Such a transformation of the response variable produces
-a model with *R*<sup>2</sup> and adjusted *R*<sup>2</sup> of 0.266 and
-0.261 respectively, which are marginally lower than the *R*<sup>2</sup>
-values from the straight line model in part (a). This suggests the
-Box-Cox method did not produce much improvement in modeling the
-phytoplankton data, even though there is a slight improvement in the
-normality assumption with the residuals lieing quite close to the line
-in the new normal probability plot (slightly light-tailed).
+Because in part (a) the normal probability and residuals plots show that the normality assumption and constant variance condition are not met, we should try the Box-Cox method. Box-Cox method yields a transformation with lambda: 2. Such a transformation of the response variable produces a model with *R*<sup>2</sup> and adjusted *R*<sup>2</sup> of 0.266 and 0.261 respectively, which are marginally lower than the *R*<sup>2</sup> values from the straight line model in part (a). This suggests the Box-Cox method did not produce much improvement in modeling the phytoplankton data, even though there is a slight improvement in the normality assumption with the residuals lieing quite close to the line in the new normal probability plot (slightly light-tailed).
 
 ### Part (c)
 
 -   An analyst suggests to use the following model:
-    -   $ y = \_0 + \_1 (x-4.5)^2 $
--   Using transformations, fit a simple linear regression model. Plot
-    the scatter diagram and fitted curve (Note: it is not a straight
-    line in this case). Compare *M**S*<sub>*r**e**s*</sub>,
-    *R*<sup>2</sup> and the R-student residual plots with the model in
-    part a.
+    -   *y = β<sub>0</sub> + β<sub>1</sub>*(*x*-4.5)<sup>2</sup>
+-   Using transformations, fit a simple linear regression model. Plot the scatter diagram and fitted curve (Note: it is not a straight line in this case). Compare *MS*<sub>res</sub>, *R*<sup>2</sup> and the *R*-student residual plots with the model in part (a).
 
 ``` r
 new_subs2 = (subs2 - 4.5)^2
@@ -308,7 +268,6 @@ MS_res_c = SS_res_c/(n - (k+1))
 cat("\nMS_res for Analyst's Model =",MS_res_c,"\nMS_res for Straight Line Model =",MS_res_a)
 ```
 
-    ## 
     ## MS_res for Analyst's Model = 147.9643 
     ## MS_res for Straight Line Model = 405.5107
 
@@ -316,7 +275,6 @@ cat("\nMS_res for Analyst's Model =",MS_res_c,"\nMS_res for Straight Line Model 
 summary(fit3)
 ```
 
-    ## 
     ## Call:
     ## lm(formula = pop ~ new_subs2)
     ## 
@@ -342,20 +300,11 @@ abline(c(0,0), col="red")
 
 ![](README_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
 
-MS\_res for the Analyst’s model of 148 is significantly lower than
-MS\_res due to the straight line model, while the *R*<sup>2</sup> and
-adjusted *R*<sup>2</sup> values of 0.741 and 0.740 respectively are
-significantly higher for the Analyst’s model. Additionally, residuals
-for the new model are not quite within horizontal bands (the bands
-slightly narrow for fitted values near 120), indicating non-constant
-variance. This means the new model is a better fit to the data, but
-could be better.
+*MS*<sub>res</sub> for the Analyst’s model of 148 is significantly lower than *MS*<sub>res</sub> due to the straight line model, while the *R*<sup>2</sup> and adjusted *R*<sup>2</sup> values of 0.741 and 0.740 respectively are significantly higher for the Analyst’s model. Additionally, residuals for the new model are not quite within horizontal bands (the bands slightly narrow for fitted values near 120), indicating non-constant variance. This means the new model is a better fit to the data, but could be better.
 
 ### Part (d)
 
--   Construct the probability plot for part (c). Is there a problem with
-    the normality assumption? If so determine the problem (heavy tailed,
-    light tailed, or something else)
+-   Construct the probability plot for part (c). Is there a problem with the normality assumption? If so determine the problem (heavy tailed, light tailed, or something else)
 
 ``` r
 stdRes = rstandard(fit3)
@@ -366,10 +315,7 @@ qqline(rStuRes, datax = TRUE)
 
 ![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
-Based on the normal probability plot, there appears to be a problem with
-the normality assumption. The problem can be described as residuals
-missing the line near the extreme ends but closely following the line
-near the center.
+Based on the normal probability plot, there appears to be a problem with the normality assumption. The problem can be described as residuals missing the line near the extreme ends but closely following the line near the center.
 
 ## Question-2
 
@@ -387,9 +333,7 @@ plot(temp,vap_pres,xlab="Temperature (degrees Kelvin)",ylab="Vapor Pressure (mm 
 
 ![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
-It does not seem likely that a straight-line model will suffice because
-the slope between successive points seems to increase as temperature
-increases.
+It does not seem likely that a straight-line model will suffice because the slope between successive points seems to increase as temperature increases.
 
 ### Part (b)
 
@@ -413,7 +357,6 @@ abline(fitted$coefficients,col="red")
 summary(fitted)
 ```
 
-    ## 
     ## Call:
     ## lm(formula = vap_pres ~ temp)
     ## 
@@ -454,13 +397,7 @@ SS_t = sum((vap_pres - mean(vap_pres))^2)
 MS_res_b = SS_res_b/(n - (k+1))
 ```
 
-The straight-line model yields *R*<sup>2</sup> and adjusted
-*R*<sup>2</sup> values of 0.798 and 0.776 respectively, initially
-suggesting a good fit to the data. MSres is found to be 1.3822545^{4},
-However there is definitely an issue with the normality assumption due
-to residuals deviating away from the line in the Normal Probability
-plot. In addition, the pattern in the Residuals vs. Predicted Responses
-plot suggests nonlinearity
+The straight-line model yields *R*<sup>2</sup> and adjusted *R*<sup>2</sup> values of 0.798 and 0.776 respectively, initially suggesting a good fit to the data. *MS*<sub>res</sub> is found to be 1.3822545e4, However there is definitely an issue with the normality assumption due to residuals deviating away from the line in the Normal Probability plot. In addition, the pattern in the Residuals vs. Predicted Responses plot suggests nonlinearity
 
 ### Part (c)
 
@@ -478,7 +415,6 @@ abline(fit2$coefficients,col="red")
 summary(fit2)
 ```
 
-    ## 
     ## Call:
     ## lm(formula = vapRep ~ tempRep)
     ## 
@@ -519,15 +455,7 @@ SS_t = sum((vapRep - mean(vapRep))^2)
 MS_res_c = SS_res_c/(n - (k+1))
 ```
 
-The Clausius-Clapeyron model yields both *R*<sup>2</sup> and adjusted
-*R*<sup>2</sup> values of 0.9999, suggesting a better fit to the data
-than the straight-line model. MSres is 4.2735276^{-4} which is lower
-than the MSres for the straight-line model, suggesting lower variance
-due to the new model. However there is still an issue with the normality
-assumption due to residuals deviating away from the line at the extremes
-in the Normal Probability plot. There persists a pattern in the
-Residuals vs. Predicted Responses plot, suggesting nonlinearity. This
-means that the Clausius-Clapeyron model is better but not perfect.
+The Clausius-Clapeyron model yields both *R*<sup>2</sup> and adjusted *R*<sup>2</sup> values of 0.9999, suggesting a better fit to the data than the straight-line model. *MS*<sub>res</sub> is 4.2735276e-4 which is lower than the *MS*<sub>res</sub> for the straight-line model, suggesting lower variance due to the new model. However there is still an issue with the normality assumption due to residuals deviating away from the line at the extremes in the Normal Probability plot. There persists a pattern in the Residuals vs. Predicted Responses plot, suggesting nonlinearity. This means that the Clausius-Clapeyron model is better but not perfect.
 
 ## Question-3
 
@@ -546,9 +474,7 @@ plot(minExp, numBact, xlab="Minutes of Exposure", ylab="Number of Bacteria")
 
 ![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
-It does not appear that a straight-line model will be adequate because
-minutes of exposure seems to asymptotically approach zero, slope getting
-less negative as minutes of exposure increases.
+It does not appear that a straight-line model will be adequate because minutes of exposure seems to asymptotically approach zero, slope getting less negative as minutes of exposure increases.
 
 ### Part (b)
 
@@ -564,7 +490,6 @@ abline(fit, col="red")
 summary(fit)
 ```
 
-    ## 
     ## Call:
     ## lm(formula = numBact ~ minExp)
     ## 
@@ -604,14 +529,7 @@ SS_t = sum((numBact - mean(numBact))^2)
 MS_res_b = SS_res_b/(n - (k+1))
 ```
 
-With a straight-line model we obtain *R*<sup>2</sup> and adjusted
-*R*<sup>2</sup> values of 0.869 and 0.856 respectively, suggesting a
-decent fit to the data. And MSres is calculated to be 334.810373. Yet
-there is an issue with the normality assumption because of the residuals
-deviating away from the line in the Normal Probability plot, resembling
-negative skew. There is also a pattern in the Residuals vs. Predicted
-Responses plot, implying nonlinearity. Lastly, there seems to be an
-outlier, namely the first observation of minExp = 1, numBact = 175.
+With a straight-line model we obtain *R*<sup>2</sup> and adjusted *R*<sup>2</sup> values of 0.869 and 0.856 respectively, suggesting a decent fit to the data. And MSres is calculated to be 334.810373. Yet there is an issue with the normality assumption because of the residuals deviating away from the line in the Normal Probability plot, resembling negative skew. There is also a pattern in the Residuals vs. Predicted Responses plot, implying nonlinearity. Lastly, there seems to be an outlier, namely the first observation of minExp = 1, numBact = 175.
 
 ### Part (c)
 
@@ -628,7 +546,6 @@ abline(fit2$coefficients,col="red")
 summary(fit2)
 ```
 
-    ## 
     ## Call:
     ## lm(formula = numBact ~ new_minExp)
     ## 
@@ -669,16 +586,4 @@ SS_t = sum((numBact - mean(numBact))^2)
 MS_res_c = SS_res_c/(n - (k+1))
 ```
 
-The transformed model describes number of bacteria regressed with the
-natural logarithm of minutes of exposure. This yields higher
-*R*<sup>2</sup> and adjusted *R*<sup>2</sup> values of 0.984 and 0.982
-respectively, suggesting a better fit to the data than the straight-line
-model. MSres is `r`MS\_res\_c\`, which is lower than the MSres for the
-straight-line model, implying lower variance due to the transformed
-model. There is a minor issue with the normality assumption as the
-residuals are fairly close to the line and farther at the extremes in
-the Normal Probability plot, but note that observation 1 is clearly an
-outlier. There is not much of a pattern in the Residuals vs. Predicted
-Responses plot, so there is less of a case for nonlinearity, but the
-outlier continues to be an issue. In conclusion, the transformed model
-is pretty adequate in representing the data.")
+The transformed model describes number of bacteria regressed with the natural logarithm of minutes of exposure. This yields higher *R*<sup>2</sup> and adjusted *R*<sup>2</sup> values of 0.984 and 0.982 respectively, suggesting a better fit to the data than the straight-line model. *MS*<sub>res</sub> here is lower than the *MS*<sub>res</sub> for the straight-line model, implying lower variance due to the transformed model. There is a minor issue with the normality assumption as the residuals are fairly close to the line and farther at the extremes in the Normal Probability plot, but note that observation 1 is clearly an outlier. There is not much of a pattern in the Residuals vs. Predicted Responses plot, so there is less of a case for nonlinearity, but the outlier continues to be an issue. In conclusion, the transformed model is pretty adequate in representing the data.")
